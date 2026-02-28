@@ -1,5 +1,5 @@
 [package]
-name = "wgpu-llm-core"
+name = "wgpu-llm"
 description = "LLM inference engine with dynamic pipeline construction"
 version.workspace = true
 edition.workspace = true

@@ -19,4 +19,5 @@ log = "0.4"
 env_logger = "0.11"
 
 # workspace internal
-wgpu-llm-core = { path = "crates/wgpu-llm-core" }
+wgpu-llm = { path = "crates/wgpu-llm" }
+

@@ -6,7 +6,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-wgpu-llm-core.workspace = true
+wgpu-llm.workspace = true
 anyhow.workspace = true
 tokio.workspace = true
 env_logger.workspace = true

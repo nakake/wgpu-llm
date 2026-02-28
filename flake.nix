@@ -24,6 +24,7 @@
       pkgs-unstable = import nixpkgs-unstable { inherit system; };
       rustToolchain = pkgs.rust-bin.stable.latest.default.override {
         extensions = [ "rust-src" "rust-analyzer" "clippy" ];
+        targets = [ "x86_64-pc-windows-gnu"];
       };
 
       nixvim' = nixvim.legacyPackages.${system};
@@ -46,9 +47,17 @@
           tabstop = 2;
           shiftwidth = 2;
           expandtab = true;
+          list = true;
+          listchars = "trail:·,nbsp:␣";
         };
 
+        
         autoCmd = [
+          {
+            event = ["BufReadPost" "BufNewFile"];
+            pattern = ["*"];
+            command = "highlight ZenkakuSpace ctermbg=red guibg=red | match ZenkakuSpace /\\%u3000/";
+          }
           {
             event = ["FocusLost" "BufLeave"];
             pattern = [ "*" ];
@@ -194,17 +203,9 @@
         ]) ++ [
           nvim
         ];
-
-        # WSL2: ホストのGPUドライバをNixシェル内から見えるようにする
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
-          pkgs.vulkan-loader
-        ] + ":/usr/lib/wsl/lib";
-
-        VK_ICD_FILENAMES = "/usr/share/vulkan/icd.d/dzn_icd.x86_64.json";
-
+        
         shellHook = ''
-          echo "wgpu-llm dev environment loaded"
-          echo "Rust: $(rustc --version)"
+          echo "wgpu-llm dev enviroment loaded"
         '';
       };
     };

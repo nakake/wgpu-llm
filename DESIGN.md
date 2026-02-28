@@ -109,7 +109,7 @@ WGSLソース内の `{{HIDDEN_DIM}}` 等をRust側で置換してからコンパ
 
 ---
 
-## wgpu-llm-core
+## wgpu-llm
 
 ### パイプライン構築: config駆動（案E）
 
@@ -285,7 +285,7 @@ DecoderConfigは入力ソース（config.json / GGUF）に依存しない統一�
 低レベルAPI（カーネル単位で使える）を先行実装する。
 高レベルAPI（モデルパスを渡すだけで推論できる）は後から追加する。
 
-wgpu-llm-coreの出力はlogits。サンプリングはwgpu-llm-cli側の責務。
+wgpu-llmの出力はlogits。サンプリングはwgpu-llm-cli側の責務。
 
 ---
 

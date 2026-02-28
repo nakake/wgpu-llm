@@ -13,10 +13,10 @@ wgpuベースのLLM推論エンジン。HuggingFace config.jsonからGPUパイ�
 ## ビルド・テストコマンド
 
 ```bash
-cargo build                          # 全crateビルド
+cargo build                          # 全crateビルド（Windowsターゲット）
 cargo test                           # 全テスト実行
-cargo test -p wgpu-kernels           # 単一crateのテスト
-cargo test -p wgpu-kernels test_name # 単一テスト実行
+cargo test -p wgpu-llm               # 単一crateのテスト
+cargo test -p wgpu-llm test_name     # 単一テスト実行
 cargo clippy --workspace             # lint
 cargo fmt --all                      # フォーマット
 cargo fmt --all -- --check           # フォーマットチェック
@@ -26,16 +26,18 @@ GPU必要なテストは`tokio::test`と`wgpu`デバイス初期化を使用す�
 
 ## 開発環境
 
-Nixフレークのdevshell（`nix develop`またはdirenv）。Rustツールチェイン（stable + rust-analyzer + clippy）、Vulkanローダー、開発ツールを提供。WSL2環境でホストGPUパススルー（`/usr/lib/wsl/lib`、`dzn_icd` Vulkan ICD）。
+Nixフレークのdevshell（`nix develop`またはdirenv）。Rustツールチェイン（stable + rust-analyzer + clippy + Windowsクロスコンパイル）、mingw-w64クロスコンパイラ、開発ツールを提供。
+
+WSL2環境ではVulkanドライバの互換性問題があるため、Windowsターゲット（`x86_64-pc-windows-gnu`）へのクロスコンパイル方式を採用。`.cargo/config.toml`でデフォルトターゲットを設定済み。ビルド成果物はWindows `.exe`としてWSL2上から直接実行でき、ネイティブのGPUドライバ（D3D12/Vulkan）を使用する。
 
 ## ワークスペース構成
 
 Cargoワークスペース、2 crate構成:
 
-- **wgpu-llm-core** — 推論エンジン本体。GPUカーネル（GEMM, Softmax, LayerNorm, RMSNorm, Attention等）、config解析（HuggingFace config.json → `DecoderConfig`）、グラフ構築（`build_decoder`）、重みロード（safetensors + モデルごとの`WeightMapping`）、実行。カーネルは`kernels`モジュールとして内包。WGSLシェーダーは`{{PLACEHOLDER}}`文字列テンプレートでコンパイル時定数を埋め込み、ランタイム値はuniformバッファで渡す。
-- **wgpu-llm-cli** — 薄いCLIラッパー。トークナイザー（`tokenizers` crate）、サンプリング（temperature/top-k/top-p）、UI。wgpu-llm-coreに依存。
+- **wgpu-llm** — 推論エンジン本体。GPUカーネル（GEMM, Softmax, LayerNorm, RMSNorm, Attention等）、config解析（HuggingFace config.json → `DecoderConfig`）、グラフ構築（`build_decoder`）、重みロード（safetensors + モデルごとの`WeightMapping`）、実行。カーネルは`kernels`モジュールとして内包。WGSLシェーダーは`{{PLACEHOLDER}}`文字列テンプレートでコンパイル時定数を埋め込み、ランタイム値はuniformバッファで渡す。
+- **wgpu-llm-cli** — 薄いCLIラッパー。トークナイザー（`tokenizers` crate）、サンプリング（temperature/top-k/top-p）、UI。wgpu-llmに依存。
 
-依存関係: `wgpu-llm-cli → wgpu-llm-core`
+依存関係: `wgpu-llm-cli → wgpu-llm`
 
 ## 主要アーキテクチャ判断
 
