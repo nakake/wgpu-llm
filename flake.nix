@@ -175,6 +175,10 @@
           trouble = {
             enable = true;
           };
+
+          lazygit = {
+            enable = true;
+          };
         };
 
         keymaps = [
@@ -182,6 +186,7 @@
           { mode = "n"; key = "<Esc>"; action = "<cmd>nohlsearch<cr>"; options.desc = "Clear search highlight"; }
           { mode = "n"; key = "<leader>xx"; action = "<cmd>Trouble diagnostics toggle<cr>"; options.desc = "Diagnostics (Trouble)"; }
           { mode = "n"; key = "<leader>xd"; action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>"; options.desc = "Buffer diagnostics (Trouble)"; }
+          { mode = "n"; key = "<leader>gg"; action = "<cmd>LazyGit<cr>"; options.desc = "LazyGit"; }
         ];
       };
     in
@@ -189,6 +194,7 @@
       devShells.${system}.default = pkgs.mkShell {
         packages = (with pkgs; [
           rustToolchain
+          pkgsCross.mingwW64.stdenv.cc
           pkg-config
           vulkan-headers
           vulkan-loader
