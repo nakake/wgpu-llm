@@ -24,7 +24,7 @@
       pkgs-unstable = import nixpkgs-unstable { inherit system; };
       rustToolchain = pkgs.rust-bin.stable.latest.default.override {
         extensions = [ "rust-src" "rust-analyzer" "clippy" ];
-        targets = [ "x86_64-pc-windows-gnu"];
+        targets = [ "x86_64-pc-windows-gnu" "x86_64-unknown-linux-gnu"];
       };
 
       nixvim' = nixvim.legacyPackages.${system};
@@ -195,6 +195,7 @@
         packages = (with pkgs; [
           rustToolchain
           pkgsCross.mingwW64.stdenv.cc
+          pkgsCross.mingwW64.windows.pthreads
           pkg-config
           vulkan-headers
           vulkan-loader

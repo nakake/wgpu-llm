@@ -1,3 +1,5 @@
+mod template;
+
 use wgpu::{Features, InstanceDescriptor, Limits};
 
 pub async fn init_gpu() -> anyhow::Result<(wgpu::Device, wgpu::Queue)> {
