@@ -13,7 +13,7 @@ wgpuベースのLLM推論エンジン。HuggingFace config.jsonからGPUパイ�
 ## ビルド・テストコマンド
 
 ```bash
-cargo build                          # 全crateビルド（Windowsターゲット）
+cargo build                          # 全crateビルド
 cargo test                           # 全テスト実行
 cargo test -p wgpu-llm               # 単一crateのテスト
 cargo test -p wgpu-llm test_name     # 単一テスト実行
@@ -26,9 +26,9 @@ GPU必要なテストは`tokio::test`と`wgpu`デバイス初期化を使用す�
 
 ## 開発環境
 
-Nixフレークのdevshell（`nix develop`またはdirenv）。Rustツールチェイン（stable + rust-analyzer + clippy + Windowsクロスコンパイル）、mingw-w64クロスコンパイラ、開発ツールを提供。
+Nixフレークのdevshell（`nix develop`またはdirenv）。Rustツールチェイン（stable + rust-analyzer + clippy）と開発ツールを提供。
 
-WSL2環境ではVulkanドライバの互換性問題があるため、Windowsターゲット（`x86_64-pc-windows-gnu`）へのクロスコンパイル方式を採用。`.cargo/config.toml`でデフォルトターゲットを設定済み。ビルド成果物はWindows `.exe`としてWSL2上から直接実行でき、ネイティブのGPUドライバ（D3D12/Vulkan）を使用する。
+対応プラットフォーム: macOS（Metal バックエンド）、Windows ネイティブ（D3D12/Vulkan バックエンド）。開発はmacOS上で行い、`cargo build`でネイティブビルドする。
 
 ## ワークスペース構成
 
