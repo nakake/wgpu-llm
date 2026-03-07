@@ -1,5 +1,6 @@
 mod template;
 mod kernels;
+mod config;
 
 use wgpu::{Features, InstanceDescriptor, Limits};
 
